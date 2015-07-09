@@ -85,7 +85,7 @@ function geronimo() {
 	}
 	
 	function buildWall(context,gridX,gridY,width,height) {
-		console.log("BuildWall");
+		// console.log("BuildWall");
 		width = width*2-1;
 		height = height*2-1;
 		context.fillRect(pacman.radius/2+gridX*2*pacman.radius,pacman.radius/2+gridY*2*pacman.radius, width*pacman.radius, height*pacman.radius);
@@ -429,26 +429,23 @@ function geronimo() {
 		this.gridBaseX = gridBaseX;
 		this.gridBaseY = gridBaseY;
 		this.speed = 5;
-		this.images = JSON.parse(
-			'{"normal" : {'
-				+ '"inky" : "0",'
-				+ '"pinky" : "1",'
-				+ '"blinky" : "2",'
-				+ '"clyde" : "3"'
-				+ '},'
-			+
-			'"frightened1" : {'
-				+
-				'"left" : "", "up": "", "right" : "", "down": ""},'
-			+
-			'"frightened2" : {'
-				+
-				'"left" : "", "up": "", "right" : "", "down": ""},'
-			+
-			'"dead" : {'
-				+
-				'"left" : "", "up": "", "right" : "", "down": ""}}'
-			);
+		this.images = {
+			"normal" : {
+				"inky" : "0",
+				"pinky" : "1",
+				"blinky" : "2",
+				"clyde" : "3"
+			},
+			"frightened1" : {
+				"left" : "", "up": "", "right" : "", "down": ""
+			},
+			"frightened2" : {
+				"left" : "", "up": "", "right" : "", "down": ""
+			},
+			"dead" : {
+				"left" : "", "up": "", "right" : "", "down": ""
+			}
+		}
 		this.image = new Image();
 		this.image.src = image;
 		this.ghostHouse = true;
