@@ -1104,6 +1104,8 @@ function geronimo() {
 
 	context_walls.fillStyle = "Blue";
 	context_walls.strokeStyle = "Blue";
+	context_walls.fillStyle = "rgb(19, 107, 84)";
+	context_walls.strokeStyle = "rgb(19, 107, 84)";
 	
 	//horizontal outer
 	buildWall(context_walls,0,0,18,1);

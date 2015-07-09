@@ -22,7 +22,7 @@ body {
 .main a, .main a:link, .main a:active, .main a:visited {
     padding: 5px;
 	background: #c80a0a;
-    color: rgb(255, 255, 255);
+    color: navy;
 }
 * { box-shadow: none !important; }
 
@@ -37,6 +37,7 @@ body {
 }
 .button {
 	background: #c80a0a; 
+	color: white;
 	cursor: pointer;
 	padding: 8px;
 	}
@@ -58,11 +59,11 @@ input[type="text"]:hover, input[type="text"]:focus, input[type="password"]:hover
 #highscore-list {}
 #score { float: right; }
 
-#myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
+#myCanvas { border: none; display: block; background: rgb(255,255,255); width: 100%;  height: auto;}
 #canvas-container { position: relative;}
 #canvas-overlay-container {
 	position: absolute;
-	background: rgba(0,0,0,0.7);
+	background: rgba(255,255,255,0.7);
 	height: 100%; 
 	width: 540px;
 	max-width: 100%;
@@ -148,6 +149,7 @@ audio {display: block; }
 	height: 90px;
 	margin: 5px;
 	background: none repeat scroll 0% 0% #C80A0A;
+	color: white;
 	line-height: 70px;
 	border-radius: 50%;
 	font-weight: bold;
@@ -161,7 +163,7 @@ audio {display: block; }
 .description { display: none; }
 
 @media screen and (max-width: 1050px) {
-	html, body { background: rgb(0,0,0);}
+	html, body { background: rgb(255,255,255);}
 }
 @media screen and (max-width: 650px) {
 	.game { width: 93%;}
