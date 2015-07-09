@@ -19,6 +19,61 @@ function createImage(url)
 	return img;
 }
 
+function create2dCanvas(width, height)
+{
+	var canvas = document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+	var context = canvas.getContext('2d');
+	return {
+		context: context,
+		element: canvas
+	};
+}
+
+
+var maskCanvas = create2dCanvas(128, 128);
+var maskContext = maskCanvas.context;
+
+function drawPacmanMask(width, height, angle)
+{
+	var x = width,
+		y = height;
+	maskContext.clearRect(0, 0, width, height);
+	maskContext.beginPath();
+	maskContext.moveTo(0, 0);
+	maskContext.lineTo(x, 0);
+	if (angle > 0)
+	{
+		maskContext.lineTo(x, /* halfway down */ y/2 - /* a little above halfway */ y/2 * Math.sin(angle/2*Math.PI/180));
+		maskContext.lineTo(x/2, y/2);
+		maskContext.lineTo(x, /* halfway down */ y/2 + /* a little below halfway */ y/2 * Math.sin(angle/2*Math.PI/180));
+	}
+	maskContext.lineTo(x, y);
+	maskContext.lineTo(0, y);
+	maskContext.lineTo(0, 0);
+	maskContext.fillStyle = 'black';
+	maskContext.fill();
+	return maskContext
+}
+
+function createPacmanImage(animation, image, angle)
+{
+	var width = 128,
+		height = 128;
+
+	var t = animation.tick(performance.now());
+
+	var context = drawPacmanMask(width, height, angle * t);
+
+	context.globalCompositeOperation = 'source-in';
+	context.drawImage(image, 0, 0, width, height);
+
+	// Reset to the default composite operation
+	context.globalCompositeOperation = 'source-over';
+	return maskCanvas.element;
+};
+
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
 	var canvas;
@@ -799,6 +854,9 @@ function geronimo() {
 		this.stuckX = 0;
 		this.stuckY = 0;
 		this.frozen = false;		// used to play die Animation
+		this.mouthAnimation = new Animation(function linear(t) { return t; }, 300, Infinity, 1);
+		this.mouthAnimation.setDirection("alternate-reverse");
+		this.mouthAnimation.start(performance.now());
 		this.freeze = function () {
 			this.frozen = true;
 		}
@@ -1372,7 +1430,11 @@ function checkAppCache() {
 					{
 						context.translate(pacman.posX, pacman.posY);
 					}
-					context.drawImage(pacman_img, 0, 0, 30, 30);
+					// context.drawImage(pacman_img, 0, 0, 30, 30);
+					context.drawImage(
+						createPacmanImage(pacman.mouthAnimation, pacman_img, 60),
+						0, 0, 30, 30
+					);
 				}
 				else {
 					context.beginPath();
