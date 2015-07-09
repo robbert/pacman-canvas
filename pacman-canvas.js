@@ -1346,7 +1346,33 @@ function checkAppCache() {
 				
 				// Pac Man
 				if (pacman_img) {
-					context.drawImage(pacman_img, pacman.posX, pacman.posY, 30, 30);
+					var angle = 0;
+					if (pacman.direction === right)
+						angle = 0;
+					else if (pacman.direction === down)
+						angle = 90;
+					else if (pacman.direction === left)
+						angle = 180;
+					else if (pacman.direction === up)
+						angle = 270;
+
+					if (angle === 180)
+					{
+						// Flip instead of rotate
+						context.translate(pacman.posX + 30, pacman.posY);
+						context.scale(-1, 1);
+					}
+					else if (angle !== 0)
+					{
+						context.translate(pacman.posX + 30 / 2, pacman.posY + 30 / 2)
+						context.rotate(angle*Math.PI/180)
+						context.translate(-30 / 2, -30 / 2)
+					}
+					else
+					{
+						context.translate(pacman.posX, pacman.posY);
+					}
+					context.drawImage(pacman_img, 0, 0, 30, 30);
 				}
 				else {
 					context.beginPath();
