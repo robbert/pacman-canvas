@@ -1,3 +1,73 @@
 AddType application/x-web-app-manifest+json .webapp
+AddType application/xml .xsd .xsl .rng
+AddType application/xhtml+xml .xhtml
 AddType application/json .json
-AddCharset ISO-8859-1 .json
+AddType text/plain .rng .diff .txt
+AddType application/javascript .js .js.gz
+AddType image/svg+xml .svg
+AddType application/woff2 .woff2
+
+AddCharset UTF-8 .js .json .xsd .xsl .xml .rng .txt .css .svg .html .htm .md
+AddEncoding gzip .gz
+
+DirectoryIndex index.html index.html
+
+# Video
+AddType video/ogg .ogv
+AddType video/mp4 .mp4
+AddType video/webm .webm
+
+# For development:
+Options Indexes
+
+# For improved performance
+Options -MultiViews
+
+# Rewrite .js to .js.gz if they exist
+# Options FollowSymLinks
+# RewriteEngine On
+# RewriteCond %{HTTP:Accept-Encoding} gzip
+# RewriteCond %{REQUEST_FILENAME}.gz -f
+# RewriteRule ^(.+\.js)$ $1.gz [L]
+
+<FilesMatch \.js\.gz$>
+  ForceType 'application/javascript;charset=UTF-8'
+</FilesMatch>
+
+<FilesMatch \.json\.gz$>
+  ForceType 'application/json;charset=UTF-8'
+</FilesMatch>
+
+# GZIP compression for text, HTML, CSS, JavaScript, SVG, XML and JSON.
+<IfModule mod_deflate>
+  AddOutputFilterByType DEFLATE application/xml application/xslt+xml image/svg+xml text/css text/html application/javascript application/json text/plain
+
+  # The TTF and EOT font formats don't have a mime type assigned,
+  # match by their filename extension instead.
+  <FilesMatch "\.(ttf|eot)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+</IfModule>
+
+
+<FilesMatch "\.(html|htm|js|css|xml|xsl|xsd)$">
+  FileETag None
+  <IfModule mod_headers.c>
+    Header unset ETag
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+  </IfModule>
+</FilesMatch>
+
+# Hide Mercurial directories
+RedirectMatch 404 /\\.hg(/|$)
+
+# For redirecting to a Node.js server
+#<IfModule mod_rewrite.c>
+#  RewriteEngine on
+#  # Simple URL redirect:
+#  RewriteRule ^app/edit/server/(.*)$ http://localhost:8000/$1 [P]
+#</IfModule>
+
+Header always append X-Frame-Options SAMEORIGIN

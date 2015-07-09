@@ -12,6 +12,13 @@
 
 "use strict";
 
+function createImage(url)
+{
+	var img = new Image;
+	img.src = url;
+	return img;
+}
+
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
 	var canvas;
@@ -20,6 +27,10 @@ function geronimo() {
 	var game;
 	var canvas_walls, context_walls;
 	var inky, blinky, clyde, pinky;
+
+	var powerpill_img = createImage("img/powerpill.png"),
+		pill_img = createImage("img/pill.png"),
+		pacman_img = createImage("img/pacman.png");
 
 	var mapConfig = "data/map.json";
 
@@ -1301,16 +1312,26 @@ function checkAppCache() {
 			var dotPosY;		
 			$.each(game.map.posY, function(i, item) {
 				dotPosY = this.row;
-			   $.each(this.posX, function() { 
-				   if (this.type == "pill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/5,0*Math.PI,2*Math.PI);
-					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
-				   }
-				   else if (this.type == "powerpill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/3,0*Math.PI,2*Math.PI);
-					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
-				   }
-			   }); 
+				$.each(this.posX, function() { 
+					if (this.type == "pill") {
+						if (pill_img) {
+							context.drawImage(pill_img, game.toPixelPos(this.col-1)-pacman.radius/2, game.toPixelPos(dotPosY-1)-pacman.radius/2, 48, 48);
+						}
+						else {
+							context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/5,0*Math.PI,2*Math.PI);
+							context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
+						}
+					}
+					else if (this.type == "powerpill") {
+						if (powerpill_img) {
+							context.drawImage(powerpill_img, game.toPixelPos(this.col-1)-pacman.radius/2, game.toPixelPos(dotPosY-1)-pacman.radius/2, 48, 48);
+						}
+						else {
+							context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/3,0*Math.PI,2*Math.PI);
+							context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
+						}
+					}
+				});
 			});
 			context.fill();
 			
@@ -1327,13 +1348,18 @@ function checkAppCache() {
 				
 				
 				// Pac Man
-				context.beginPath();
-				context.fillStyle = "Yellow";
-				context.strokeStyle = "Yellow";
-				context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
-				context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
-				context.stroke();
-				context.fill();
+				if (pacman_img) {
+					context.drawImage(pacman_img, pacman.posX, pacman.posY, 30, 30);
+				}
+				else {
+					context.beginPath();
+					context.fillStyle = "Yellow";
+					context.strokeStyle = "Yellow";
+					context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
+					context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
+					context.stroke();
+					context.fill();
+				}
 			}
 			
 		}
